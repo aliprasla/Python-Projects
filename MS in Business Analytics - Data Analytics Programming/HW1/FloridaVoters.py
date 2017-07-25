@@ -3,9 +3,8 @@
 Created on Thu Jul 20 11:17:02 2017
 
 @author: Ali Prasla
-
-Description: Scrapes FloridaVotes.html for vote data in the table. Cleans and sorts the data
 """
+import re
 def byDem(x):
     return x[2]
 def printList(x):
@@ -15,9 +14,7 @@ def main():
     allTds = []
     for line in fl:
         if(line.find("td") > 0):
-            line = line.replace("<td>","")
-            line = line.replace("</td>","")
-            line = line.replace("\n","")
+            line = re.findall("<td>(.*?)</td>",line)
             allTds.append(line)
     allTds = allTds[1:]
     #Normalize into 2d list
@@ -25,7 +22,7 @@ def main():
     currentList = []
     for index,item in enumerate(allTds):
       #reset currentList
-      item = item.replace(",","")
+      item = item[0].replace(",","")
       try:
           item = int(item)
       except:
